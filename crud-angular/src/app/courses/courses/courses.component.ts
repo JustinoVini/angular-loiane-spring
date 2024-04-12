@@ -4,6 +4,7 @@ import { CoursesService } from '../service/courses.service';
 import { Observable, catchError, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from 'src/app/shared/components/error-dialog/error-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-courses',
@@ -14,9 +15,9 @@ export class CoursesComponent implements OnInit {
 
   courses$: Observable<Course[]>;
 
-  displayedColumns = ['name', 'category'];
+  displayedColumns = ['name', 'category', 'actions'];
 
-  constructor(private _courseService: CoursesService, public dialog: MatDialog) {
+  constructor(private _courseService: CoursesService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
     this.courses$ = this._courseService.list()
       .pipe(
         catchError(error => {
@@ -28,6 +29,10 @@ export class CoursesComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  onAdd() {
+    this.router.navigate(['new'], { relativeTo: this.route }); /* pega a rota que está e passa só o new */
   }
 
   onError(errorMessage: string) {
